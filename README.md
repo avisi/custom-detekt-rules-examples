@@ -1,0 +1,1 @@
+# custom-detekt-rules-examples
