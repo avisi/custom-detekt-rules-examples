@@ -20,17 +20,17 @@ class NestedApply : Rule() {
         }
     }
 
-/**
- * Loops through the AST recursively in order to find the number of nested applies. It counts the number of REFERENCE_EXPRESSION with the text 'apply'.
- * The way the AST is build up; a found apply doenst have another apply as an (indirect) child, but has a direct sibling that instead has child elements.
- */
-private fun findNumberOfNestedApply(element: PsiElement, amount: Int = 0): Int {
-    val newAmount = if (element.hasApplyChild()) amount + 1 else amount
+    /**
+    * Loops through the AST recursively in order to find the number of nested applies. It counts the number of REFERENCE_EXPRESSION with the text 'apply'.
+    * The way the AST is build up; a found apply doenst have another apply as an (indirect) child, but has a direct sibling that instead has child elements.
+    */
+    private fun findNumberOfNestedApply(element: PsiElement, amount: Int = 0): Int {
+        val newAmount = if (element.hasApplyChild()) amount + 1 else amount
 
-    return element.children.map {
-        findNumberOfNestedApply(it, newAmount)
-    }.max() ?: newAmount
-}
+        return element.children.map {
+            findNumberOfNestedApply(it, newAmount)
+        }.max() ?: newAmount
+    }
 
     private fun PsiElement.hasApplyChild(): Boolean =
         this.children.any { it.toString() == "REFERENCE_EXPRESSION" && it.text == "apply" }
@@ -43,5 +43,4 @@ private fun findNumberOfNestedApply(element: PsiElement, amount: Int = 0): Int {
                     "There is a maximum of $THRESHOLD apply functions."
         )
     )
-
 }
